@@ -1,0 +1,207 @@
+// CUSTOMER SERVICE SYSTEM
+// DEFINING LIBRARIES
+#include <iostream>
+#include <string>
+
+// DEFINING NODE STRUCTURE
+struct Node {
+    int data; // stores the client ID
+    std::string name; // stores the client name
+    Node* next; // pointer to the next node in the queue
+};
+
+// QUEUE STRUCTURE
+struct Queue {
+    Node* first = nullptr;
+    Node* last = nullptr;
+};
+
+// FUNCTION TO INSERT A NEW CLIENT AT THE END OF THE QUEUE
+void insertClient(Queue* q, int value, const std::string& name) {
+    Node* newNode = new Node;
+    newNode->data = value;
+    newNode->name = name; // stores the client name
+    newNode->next = nullptr;
+    if (q->last == nullptr)
+        q->first = newNode;
+    else
+        q->last->next = newNode;
+    q->last = newNode;
+}
+
+// FUNCTION TO ATTEND THE CLIENT AT THE FRONT OF THE QUEUE
+int attendClient(Queue* q) {
+    if (q->first == nullptr) {
+        std::cout << "Queue is empty.\n";
+        return -1;
+    }
+    Node* temp = q->first;
+    int value = temp->data;
+    q->first = q->first->next;
+    if (q->first == nullptr)
+        q->last = nullptr;
+    delete temp;
+    return value;
+}
+
+// FUNCTION TO REMOVE A SPECIFIC CLIENT FROM THE QUEUE
+void removeValue(Queue* q, int value) {
+    Node* current = q->first;
+    Node* previous = nullptr;
+
+    while (current != nullptr) {
+        if (current->data == value) {
+            if (previous == nullptr) { // Value is at the beginning of the queue
+                q->first = current->next;
+                if (q->first == nullptr)
+                    q->last = nullptr; // Queue is now empty
+            } else {
+                previous->next = current->next;
+                if (current->next == nullptr)
+                    q->last = previous; // Update last node if removed node was the last
+            }
+            delete current;
+            std::cout << "Value " << value << " removed from the queue.\n";
+            return;
+        }
+        previous = current;
+        current = current->next;
+    }
+    std::cout << "Value " << value << " not found in the queue.\n";
+}
+
+// FUNCTION TO PRINT THE QUEUE
+void printQueue(Queue* q) {
+    Node* current = q->first;
+    if (current == nullptr) {
+        std::cout << "Queue is empty.\n";
+        return;
+    }
+    while (current != nullptr) {
+        std::cout << "ID: " << current->data << ", Name: " << current->name << " -> ";
+        current = current->next;
+    }
+    std::cout << "NULL\n";
+}
+
+// FUNCTION TO FREE QUEUE MEMORY
+void freeQueue(Queue* q) {
+    Node* current = q->first;
+    while (current != nullptr) {
+        Node* temp = current;
+        current = current->next;
+        delete temp;
+    }
+    q->first = nullptr;
+    q->last = nullptr;
+}
+
+// FUNCTION TO REVERSE THE QUEUE AND PRINT IT
+void reverseQueue(Queue* q) {
+    Queue* auxiliaryQueue = new Queue;
+    while (q->first != nullptr) {
+        // STORE THE CLIENT AT THE FRONT OF THE QUEUE
+        Node* current = q->first;
+        int value = current->data;
+        std::string name = current->name; // stores the client name
+
+        // REMOVE THE CLIENT FROM THE ORIGINAL QUEUE
+        attendClient(q);
+
+        // ADD THE CLIENT TO THE AUXILIARY QUEUE
+        Node* newNode = new Node;
+        newNode->data = value;
+        newNode->name = name; // stores the client name
+        newNode->next = auxiliaryQueue->first;
+        auxiliaryQueue->first = newNode;
+        if (auxiliaryQueue->last == nullptr)
+            auxiliaryQueue->last = newNode;
+    }
+
+    // REINSERT CLIENTS INTO THE ORIGINAL QUEUE
+    while (auxiliaryQueue->first != nullptr) {
+        Node* temp = auxiliaryQueue->first;
+        auxiliaryQueue->first = auxiliaryQueue->first->next;
+        insertClient(q, temp->data, temp->name);
+        delete temp;
+    }
+
+    delete auxiliaryQueue;
+
+    // PRINT THE QUEUE
+    std::cout << "Reversed queue: \n";
+    printQueue(q);
+}
+
+int main () {
+    // CREATING A NEW QUEUE
+    Queue* q = new Queue;
+
+    // DEFINING VARIABLES
+    int option, value;
+    std::string name;
+
+    // DEFINING CONDITIONS
+    do {
+        // INTERACTIVE MENU
+        std::cout << "\n--- Welcome to the Customer Service System! ---\n";
+        std::cout << "1. Add Client\n";
+        std::cout << "2. Attend Client\n";
+        std::cout << "3. Display Queue\n";
+        std::cout << "4. Remove Specific Client\n";
+        std::cout << "5. Reverse Queue\n";
+        std::cout << "6. Exit\n";
+        std::cout << "Choose an option: ";
+        std::cin >> option;
+
+        // CALLING FUNCTIONS AND PRINTING
+        switch (option) {
+            // ADD CLIENT
+            case 1:
+                std::cout << "Enter the client ID: " << std::endl;
+                std::cin >> value;
+                std::cin.ignore(); // to ignore newline after integer
+                std::cout << "Enter the client name: " << std::endl;
+                std::getline(std::cin, name); // allow spaces in the name
+                insertClient(q, value, name); 
+                std::cout << "Client added to the queue!" << std::endl;
+                break;
+            // ATTEND CLIENT
+            case 2:
+                value = attendClient(q); 
+                if (value != -1) {
+                    std::cout << "Attending client: ID: " << value << std::endl;
+                }
+                break;
+            // DISPLAY QUEUE
+            case 3:
+                std::cout << "Clients in the queue: " << std::endl;
+                printQueue(q); 
+                break;
+            // REMOVE SPECIFIC CLIENT
+            case 4:
+                std::cout << "Enter the client ID to remove: " << std::endl;
+                std::cin >> value;
+                removeValue(q, value);
+                break;
+            // REVERSE QUEUE
+            case 5:
+                reverseQueue(q);
+                std::cout << "Queue reversed!\n";
+                break;
+            // EXIT PROGRAM
+            case 6:
+                std::cout << "Exiting the system...\n";
+                break;
+            default:
+                std::cout << "Invalid option. Try again!\n";
+                break;
+        }
+    } while (option != 6);
+
+    // FREEING QUEUE MEMORY
+    freeQueue(q);
+    delete q;
+
+    return 0;
+}
