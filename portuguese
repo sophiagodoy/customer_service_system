@@ -164,12 +164,12 @@ int main () {
                 std::cin.ignore(); // para ignorar o newline após o inteiro
                 std::cout << "Digite o nome do cliente: " << std::endl;
                 std::getline(std::cin, nome); // para permitir que o nome tenha espaços
-                insertClient(f, valor, nome); // Usando o novo nome da função
+                insertClient(f, valor, nome); 
                 std::cout << "Cliente adicionado a fila!" << std::endl;
                 break;
             // ATENDER CLIENTE
             case 2: 
-                valor = attendClient(f); // Usando o novo nome da função
+                valor = attendClient(f); 
                 if (valor != -1) {
                     std::cout << "Atendendo cliente: ID: " << valor << std::endl;
                 }
@@ -177,7 +177,7 @@ int main () {
             // EXIBIR FILA
             case 3: 
                 std::cout << "Clientes na fila: " << std::endl; 
-                printLista(f); // Usando o novo nome da função
+                printLista(f); 
                 break; 
             // REMOLVER CLIENTE ESPECÍFICO 
             case 4:
