@@ -1,17 +1,22 @@
 # Customer Service System
 
-This is a simple C++ program designed to manage a customer queue efficiently using a linked list structure. The system allows you to add, attend, remove, and reverse the order of customers in the queue, making it a practical tool for managing customer service flow.
+This C++ project implements a customer service system using a **queue** data structure. It allows performing operations like adding customers, attending to customers, removing specific customers, and even reversing the queue. The system handles customer IDs and names, offering an interactive menu for easy usage.
 
 ## Features
 
-- **Add Customer**: Adds a new customer to the end of the queue, storing their ID and name.
-- **Attend Customer**: Removes and processes the customer at the front of the queue.
-- **Remove Specific Customer**: Finds and removes a customer by their ID.
-- **Reverse Queue**: Reverses the current order of customers in the queue.
-- **Display Queue**: Shows all customers currently in the queue.
+- **Add Customer**: Add a new customer to the queue with their ID and name.
+- **Attend Customer**: Attend to the customer at the front of the queue.
+- **Remove Specific Customer**: Remove a specific customer from the queue by their ID.
+- **Invert Queue**: Reverse the order of the customers in the queue.
+- **Display Queue**: View the current queue of customers.
 
-## Project Structure
+## How to Use
 
-The program is based on the following core structures:
-- **Linked List**: Each customer is represented as a node with a pointer to the next node, enabling efficient queue operations.
-- **Queue Structure**: Manages the nodes in the queue for customer service purposes.
+1. Compile the code in a C++ environment.
+2. Choose one of the following options from the interactive menu:
+   - Add a new customer to the queue.
+   - Attend to the customer at the front of the queue.
+   - Remove a customer by their ID.
+   - View the current queue.
+   - Reverse the queue.
+   - Exit the system.
